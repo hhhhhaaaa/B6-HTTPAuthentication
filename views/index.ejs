@@ -1,3 +1,9 @@
-<h1>Hello stranger.</h1>
-<a href="/signup">Signup</a>
-<a href="/login">Login</a>
+<% include layout/header %>
+  <% if (email) { %>
+    <h1> Welcome back <%-email%>
+  <%} else { %>
+    <h1>Hello stranger.</h1>
+    <a href="/signup">Signup</a>
+    <a href="/login">Login</a>
+  <%}%>
+<% include layout/footer %>

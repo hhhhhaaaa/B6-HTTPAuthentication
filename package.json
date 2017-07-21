@@ -2,7 +2,7 @@
   "name": "httpauthentication",
   "version": "1.0.0",
   "description": "Fifth benchmark of Phase 2",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "mocha",
     "start": "nodemon",
