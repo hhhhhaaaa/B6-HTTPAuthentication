@@ -1,0 +1,13 @@
+form.signupForm(onsubmit='add()', action='/signup', method='post')
+  input(type='email', name='signupEmail', placeholder='Email', required='')
+  br
+  input(type='password', name='signupPassword', placeholder='Password', required='')
+  input(type='password', name='signupPasswordCheck', placeholder='Verify Password', required='')
+  br
+  input(type='submit')
+
+//- if (form.signupPassword !== form.signupPasswordCheck)
+//- alert("Passwords do not match.");
+//- form.signupPassword.focus(); %>
+//- form.signupPasswordCheck.focus(); %>
+//- return false;
