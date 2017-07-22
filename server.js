@@ -16,8 +16,9 @@ const app = express();
 app.use(bodyParser.urlencoded({
   extended: false
 }));
-app.use(logger('dev'));
+app.use(cookieParser());
 app.use(express.static('public'));
+app.use(logger('dev'));
 
 //View Engine
 app.set('view engine', 'pug');
@@ -25,7 +26,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 //Routes
 app.get('/', function(request, response) {
-  const email = request.cookies.email || "";
+  const email = request.cookies.email;
   response.render('index', {
     email: email
   });
@@ -33,7 +34,6 @@ app.get('/', function(request, response) {
 
 app.post('/signup', function(request, response) {
   const email = request.body.signupEmail;
-
   response.cookie('email', email, {
     httpOnly: true
   });
