@@ -1,8 +1,7 @@
 form.signupForm(onsubmit='add()', action='/signup', method='post')
   input(type='email', name='signupEmail', placeholder='Email', required='')
   br
-  input(type='password', id="pass1", name='signupPassword', placeholder='Password', required='', onkeyup='check()')
-  input(type='password', id="pass2", name='signupPasswordCheck', placeholder='Verify Password', required='', onkeyup='check()')
+  input(type='password', name='signupPassword', placeholder='Password', required='')
+  input(type='password', name='signupPasswordCheck', placeholder='Verify Password', required='')
   br
-  span#message
   input(type='submit')
