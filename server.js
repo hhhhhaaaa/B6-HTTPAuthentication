@@ -32,17 +32,29 @@ app.get('/', function(request, response) {
   });
 });
 
-app.post('/signup', function(request, response) {
-  const email = request.body.signupEmail;
-  response.cookie('email', email, {
-    httpOnly: true
+app.route('/signup')
+  .get(function(request, response) {
+    var check = function() {
+      if (document.getElementById('password').value ==
+        document.getElementById('confirm_password').value) {
+        document.getElementById('message').style.color = 'green';
+        document.getElementById('message').innerHTML = 'matching';
+      } else {
+        document.getElementById('message').style.color = 'red';
+        document.getElementById('message').innerHTML = 'not matching';
+      }
+    }
+    response.render('signup', {
+      check: check
+    });
+  })
+  .post(function(request, response) {
+    const email = request.body.signupEmail;
+    response.cookie('email', email, {
+      httpOnly: true
+    });
+    response.redirect('/');
   });
-  response.redirect('/');
-});
-
-app.get('/signup', function(request, response) {
-  response.render('signup', {});
-});
 
 app.get('/login', function(request, response) {
   response.render('login', {});
