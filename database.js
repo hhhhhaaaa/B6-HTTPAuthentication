@@ -3,15 +3,15 @@ const connectionString = "postgres://douglaslubaway@localhost:5432/users";
 
 const db = pgp(connectionString);
 
-function insertContacts(email, password, callback) {
-  db.query((`
-    INSERT
-    INTO users
+function insertUsers(email, password, callback) {
+  return db.one((`
+    INSERT INTO users (email, password)
     VALUES ($1, $2)
+    RETURNING *;
   `), [email, password], callback);
 }
 
 module.exports = {
-  insertContacts,
+  insertUsers,
   db
 };

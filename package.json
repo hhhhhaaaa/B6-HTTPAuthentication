@@ -6,8 +6,8 @@
   "scripts": {
     "test": "mocha",
     "start": "nodemon",
-    "drop": "psql contacts -c 'DROP TABLE contacts'",
-    "schema": "psql contacts -f schema.sql"
+    "drop": "psql users -c 'DROP TABLE users'",
+    "schema": "psql users -f schema.sql"
   },
   "repository": {
     "type": "git",

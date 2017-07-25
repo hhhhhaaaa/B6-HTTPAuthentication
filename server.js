@@ -38,18 +38,22 @@ app.route('/signup')
 
     });
   })
-  .post(function(request, response) {
-    if (request.body.signupPassword !== request.body.signupPasswordCheck) {
-        alert("Passwords do not match.");
-        request.body.signupPassword.focus();
-        request.body.signupPasswordCheck.focus();
-        return false;
+  .post(function( request, response ) {
+    if ( request.body.signupPassword !== request.body.signupPasswordCheck ) {
+      response.render( 'signup', { msg: "Passwords do not match." });
+    } else {
+      const email = request.body.signupEmail;
+      const password = request.body.signupPassword;
+      const cookie = request.cookies.cookieName;
+
+      database.insertUsers(email, password)
+        .then(result => {
+          response.cookie( 'email', email, { httpOnly: true })
+          response.redirect('/')
+        })
+        .catch
+          ( error => response.status(500).render('error', { error: error }));
       }
-    const email = request.body.signupEmail;
-    response.cookie('email', email, {
-      httpOnly: true
-    });
-    response.redirect('/');
   });
 
 app.get('/login', function(request, response) {
