@@ -1,4 +1,6 @@
-form.loginForm(action='index.html', method='post')
+form.loginForm(action='/login', method='POST')
   input(type='email', name='loginEmail', placeholder='Email')
-  input(type='password', name='logPassword', placeholder='Password')
-  input(type='submit', name='loginFormSubmit')
+  input(type='password', name='loginPassword', placeholder='Password')
+  input(type='submit')
+if msg
+  h1 #{msg}

@@ -1,4 +1,5 @@
 const bodyParser = require('body-parser');
+const cookies = require('cookies');
 const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser');
 const cheerio = require('cheerio');
@@ -19,6 +20,13 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 app.use(express.static('public'));
 app.use(logger('dev'));
+app.use(cookieSession({
+  name: 'email',
+  keys: ["savetheworld"],
+
+  // Cookie Options
+  maxAge: 24 * 60 * 60 * 1000 // 24 hours
+}))
 
 //View Engine
 app.set('view engine', 'pug');
@@ -34,31 +42,85 @@ app.get('/', function(request, response) {
 
 app.route('/signup')
   .get(function(request, response) {
-    response.render('signup', {
-
-    });
-  })
-  .post(function( request, response ) {
-    if ( request.body.signupPassword !== request.body.signupPasswordCheck ) {
-      response.render( 'signup', { msg: "Passwords do not match." });
+    const email = request.cookies.email;
+    if (email) {
+      response.redirect('/');
     } else {
-      const email = request.body.signupEmail;
-      const password = request.body.signupPassword;
+      response.render('signup', {});
+    }
+  })
+  .post(function(request, response) {
+    if (request.body.signupPassword !== request.body.signupPasswordCheck) {
+      response.render('signup', {
+        msg: "Passwords do not match."
+      });
+    } else {
+      const emailSignup = request.body.signupEmail;
+      const passwordSignup = request.body.signupPassword;
       const cookie = request.cookies.cookieName;
 
-      database.insertUsers(email, password)
+      database.insertUsers(emailSignup, passwordSignup)
         .then(result => {
-          response.cookie( 'email', email, { httpOnly: true })
-          response.redirect('/')
+          response.cookie('email', emailSignup, {
+            httpOnly: true
+          });
+          response.redirect('/');
         })
-        .catch
-          ( error => response.status(500).render('error', { error: error }));
-      }
+        .catch(error => response.status(500).render('error', {
+          error: error
+        }));
+    }
   });
 
-app.get('/login', function(request, response) {
-  response.render('login', {});
+app.route('/login')
+  .get(function(request, response) {
+    const email = request.cookies.email;
+    if (email) {
+      response.redirect('/');
+    } else {
+      response.render('login', {});
+    }
+  })
+  .post(function(request, response) {
+    const emailLogin = request.body.loginEmail;
+    const passwordLogin = request.body.loginPassword;
+    const cookie = request.cookies.cookieName;
+
+    if (emailLogin === "") {
+      response.render('login', {
+        msg: "Please provide an email or password to login."
+      })
+    } else {
+      database.checkUsers(emailLogin)
+        .then(result => {
+          if (result !== null) {
+            if (result.password === passwordLogin) {
+              response.cookie('email', emailLogin, {
+                httpOnly: true
+              })
+              response.redirect('/');
+            } else {
+              response.render('login', {
+                msg: "Incorrect email or password."
+              });
+            }
+          } else {
+            response.render('login', {
+              msg: "Incorrect email or password."
+            });
+          }
+        })
+        .catch(error => response.status(500).render('error', {
+          error: error
+        }));
+    }
+  });
+
+app.get('/logout', function(request, response) {
+  request.session = null;
+  response.redirect('/');
 });
+
 
 //Port
 
