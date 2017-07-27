@@ -1,5 +1,5 @@
 const pgp = require('pg-promise')();
-const connectionString = "postgres://douglaslubaway@localhost:5432/users";
+const connectionString = "postgres://localhost:5432/users";
 
 const db = pgp(connectionString);
 
@@ -18,7 +18,7 @@ function checkUser(email, callback) {
 }
 
 module.exports = {
-  insertUsers,
-  checkUsers,
+  insertUser,
+  checkUser,
   db
 };
